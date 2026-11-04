@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f8">
+  <meta name="description" content="MensQzin project overview and architecture maps.">
+  <title>MensQzin — Tổng quan dự án</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --border: #e1e4e8;
+      --text: #20252b;
+      --muted: #68727e;
+      --accent: #4294FF;
+      --accent-light: #eef5ff;
+      --blue: #367aca;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--text);
+      background: var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+
+    .shell {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 76px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+
+    .brand img {
+      display: block;
+      width: 126px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .brand span { color: var(--muted); font-size: .84rem; font-weight: 600; }
+
+    .topbar-link {
+      color: var(--muted);
+      font-size: .86rem;
+      text-decoration: none;
+    }
+
+    .topbar-link:hover { color: var(--accent); }
+
+    .repo-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .repo-meta strong { color: var(--text); font-weight: 700; }
+
+    .hero {
+      display: block;
+      padding: 62px 0 42px;
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--accent);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      max-width: 760px;
+      margin-bottom: 20px;
+      font-size: clamp(2.35rem, 5vw, 4.6rem);
+      line-height: 1.02;
+      letter-spacing: -.045em;
+    }
+
+    .hero-copy {
+      max-width: 680px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin: 16px 0 18px;
+    }
+
+    .section-heading h2 { margin: 0; font-size: 1.45rem; letter-spacing: -.025em; }
+    .section-heading p { margin: 0; color: var(--muted); font-size: .9rem; }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      padding-bottom: 42px;
+    }
+
+    .card {
+      display: flex;
+      min-height: 258px;
+      flex-direction: column;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      transition: border-color .15s ease;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+    }
+
+    .card-kicker {
+      display: inline-flex;
+      width: fit-content;
+      margin-bottom: 18px;
+      padding: 4px 8px;
+      border: 1px solid #d3dbe3;
+      border-radius: 4px;
+      color: var(--blue);
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .card h3 { margin-bottom: 10px; font-size: 1.22rem; letter-spacing: -.02em; }
+    .card p { margin-bottom: 22px; color: var(--muted); font-size: .93rem; }
+
+    .card-meta {
+      display: block;
+      margin-top: auto;
+      padding-top: 16px;
+      color: #7a838c;
+      font-size: .75rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      overflow-wrap: anywhere;
+    }
+
+    .card-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 18px;
+      padding: 10px 13px;
+      border-radius: 5px;
+      color: #ffffff;
+      background: var(--accent);
+      font-size: .86rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .card-action:hover { background: #2f7fe0; }
+    .card-action::after { content: "↗"; font-size: 1rem; }
+
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0;
+      margin-bottom: 58px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+
+    .principle { padding: 20px; border-right: 1px solid var(--border); background: var(--surface); }
+    .principle:last-child { border-right: 0; }
+    .principle strong { display: block; margin-bottom: 6px; font-size: .95rem; }
+    .principle span { color: var(--muted); font-size: .86rem; }
+
+    footer {
+      padding: 24px 0 34px;
+      border-top: 1px solid var(--border);
+      color: #7a838c;
+      font-size: .78rem;
+    }
+
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; padding-top: 46px; }
+      .cards, .principles { grid-template-columns: 1fr; }
+      .cards { gap: 12px; }
+      .card { min-height: 0; }
+      .principles { gap: 0; }
+      .principle { border-right: 0; border-bottom: 1px solid var(--border); }
+      .principle:last-child { border-bottom: 0; }
+    }
+
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 28px, 1180px); }
+      .topbar { min-height: 72px; }
+      .brand img { width: 104px; }
+      .brand span, .topbar-link { display: none; }
+      .hero { padding: 40px 0 34px; }
+      h1 { font-size: clamp(2.65rem, 15vw, 4.2rem); }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell topbar">
+    <a class="brand" href="./index.html" aria-label="MensQzin project overview">
+      <span>Mensqzin</span>
+    </a>
+    <div class="repo-meta">
+      <!-- <span>Tác giả <strong>tuantq-thk</strong></span> -->
+      <!-- <a class="topbar-link" href="../README.md">README ↗</a> -->
+    </div>
+  </header>
+
+  <main class="shell">
+    <!-- <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">mensqzin / thư viện kiến trúc</p>
+        <h1>Tổng quan hệ thống trước khi thay đổi.</h1>
+        <p class="hero-copy">
+          Một điểm vào để đọc nhanh kiến trúc FuelPHP, vòng đời request và cách
+          các thư mục trong repository kết nối thành một tính năng hoàn chỉnh.
+        </p>
+      </div>
+    </section> -->
+
+    <div class="section-heading">
+      <h2>Khám phá dự án</h2>
+      <p>Chọn một tài liệu để bắt đầu.</p>
+    </div>
+
+    <section class="cards" aria-label="Tài liệu kiến trúc dự án">
+      <article class="card">
+        <span class="card-kicker">Kiến trúc</span>
+        <h3>Bản đồ thư mục repository</h3>
+        <p>Bản đồ các khu vực chính của repository FuelPHP và điểm bắt đầu khi thêm một tính năng mới.</p>
+        <span class="card-meta">fuel-directory-map.html</span>
+        <a class="card-action" href="./fuel-directory-map.html">Mở bản đồ thư mục</a>
+      </article>
+
+      <article class="card">
+        <span class="card-kicker">Kiến trúc</span>
+        <h3>Tổng quan repository FuelPHP</h3>
+        <p>Tổng quan controller, service, repository, model, view và luồng đầy đủ của một tính năng mẫu.</p>
+        <span class="card-meta">fuel-repository-overview.html</span>
+        <a class="card-action" href="./fuel-repository-overview.html">Mở tổng quan repository</a>
+      </article>
+
+      <article class="card">
+        <span class="card-kicker">Cấu hình</span>
+        <h3>Cấu hình runtime Fuel</h3>
+        <p>Bản đồ kết nối giữa public entry point, bootstrap, environment, config và các runtime package.</p>
+        <span class="card-meta">fuel-runtime-configuration.html</span>
+        <a class="card-action" href="./fuel-runtime-configuration.html">Mở cấu hình runtime</a>
+      </article>
+
+      <article class="card">
+        <span class="card-kicker">Luồng xử lý</span>
+        <h3>Luồng HTTP request</h3>
+        <p>Trace từ HTTP request qua front controller, bootstrap, route, surface handler và response.</p>
+        <span class="card-meta">fuel-http-request-workflow.html</span>
+        <a class="card-action" href="./fuel-http-request-workflow.html">Mở luồng request</a>
+      </article>
+
+      <article class="card">
+        <span class="card-kicker">Kiến trúc</span>
+        <h3>Kiến trúc ứng dụng từ source</h3>
+        <p>Tổng hợp các layer và quan hệ chính của ứng dụng FuelPHP dựa trên source thực tế.</p>
+        <span class="card-meta">fuel-source-architecture.html</span>
+        <a class="card-action" href="./fuel-source-architecture.html">Mở bản đồ kiến trúc</a>
+      </article>
+
+      <article class="card">
+        <span class="card-kicker">Điểm vào</span>
+        <h3>Các entry point của repository</h3>
+        <p>Nhận diện các điểm vào quan trọng của repository và vai trò của từng điểm trong runtime.</p>
+        <span class="card-meta">fuel-entrypoints.html</span>
+        <a class="card-action" href="./fuel-entrypoints.html">Mở bản đồ entry point</a>
+      </article>
+    </section>
+
+    <section class="principles" aria-label="Nguyên tắc đọc tài liệu">
+      <div class="principle">
+        <strong>Bám theo source</strong>
+        <span>Đọc theo caller, contract và file:line; không suy diễn từ tên thư mục.</span>
+      </div>
+      <div class="principle">
+        <strong>Nhận diện layer</strong>
+        <span>Phân biệt layered flow với direct-model flow đang tồn tại.</span>
+      </div>
+      <div class="principle">
+        <strong>Trung thực runtime</strong>
+        <span>Diagram và static check không thay thế cho DB, API hoặc browser E2E.</span>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">MensQzin · Tác giả: tuantq-thk · Git: tuantq-thk</div>
+  </footer>
+</body>
+</html>
